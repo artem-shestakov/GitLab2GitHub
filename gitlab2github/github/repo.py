@@ -7,6 +7,10 @@ from rich.table import Table
 
 app = typer.Typer()
 
+# @app.command()
+# def check(repo_name: str):
+#     asyncio.run(utils.get_repo(repo_name))
+
 @app.command()
-def check(repo_name: str):
-    asyncio.run(utils.get_repo(repo_name))
+def create(repo_name: str):
+    asyncio.run(utils.create_repo(repo_name))
