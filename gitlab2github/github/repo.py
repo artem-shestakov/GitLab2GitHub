@@ -1,8 +1,6 @@
 import asyncio
 import typer
 from . import utils
-from rich.console import Console
-from rich.table import Table
 
 
 app = typer.Typer()

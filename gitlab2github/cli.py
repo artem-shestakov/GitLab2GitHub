@@ -1,11 +1,12 @@
 import typer
 
-from .github.cli import app as github_app
 from gitlab2github import __appname__, __version__
-
+from .github.cli import app as github_app
+from .gitlab.cli import app as gitlab_app
 
 app = typer.Typer()
 app.add_typer(github_app, name="github")
+app.add_typer(gitlab_app, name="gitlab")
 
 def _version_callback(value: bool) -> None:
     if value:
