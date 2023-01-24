@@ -3,7 +3,9 @@ stages:
   - "pre-release"
   - "build"
   - "release"
+  - "migrate"
 
 include:
   - local: '.gitlab-ci/release.yml'
   - local: '.gitlab-ci/build.yml'
+  - local: '.gitlab-ci/migrate.yml'

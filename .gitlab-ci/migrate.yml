@@ -1,0 +1,10 @@
+---
+migrate:
+  stage: migrate
+  image: artemshestakov/gitlab2github:1.0.0
+  script:
+    - python3 -m gitlab2github mirror $CI_PROJECT_ID $CI_PROJECT_NAME
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+  tags:
+    - docker.sock
