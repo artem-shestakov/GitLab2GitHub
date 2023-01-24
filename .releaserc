@@ -1,0 +1,18 @@
+plugins:
+  - ["@semantic-release/commit-analyzer", {
+      "preset": "angular",
+      "releaseRules": [
+        {"type": "fix", "release": "patch"},
+        {"type": "feat", "release": "minor"},
+      ]
+    }]
+  - "@semantic-release/release-notes-generator"
+  - "@semantic-release/gitlab"
+  - ["@semantic-release/exec", {
+      "analyzeCommitsCmd": "echo ${lastRelease.version} > VERSION.txt",
+      "verifyReleaseCmd": "echo ${nextRelease.version} > VERSION.txt",
+    }]
+branches:
+  - "master"
+  - name: "develop"
+    prerelease: true
