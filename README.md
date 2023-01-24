@@ -1,17 +1,6 @@
 # Gitlab2Github
 Simple cli app to help mirroring repositories from GitLab to Github
 
-## Command
-### GitHub
-* Check if repository exists
-```shell
-python3 -m gitlab2github github repo check <repo_name>
-```
-* Create repository
-```shell
-python3 -m gitlab2github github repo create <repo_name>
-```
-
 ## How to use
 Create Acces tokens to communicate with repository and use environment variables to access to repository:
 | Name | Description |
