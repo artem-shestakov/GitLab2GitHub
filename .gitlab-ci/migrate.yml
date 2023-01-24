@@ -2,6 +2,9 @@
 migrate:
   stage: migrate
   image: artemshestakov/gitlab2github:1.0.0
+  variables:
+    GL_USER: $GITLAB_USER_LOGIN
+    GH_USEL: $GITLAB_USER_LOGIN
   script:
     - python3 -m gitlab2github mirror $CI_PROJECT_ID $CI_PROJECT_NAME
   rules:
