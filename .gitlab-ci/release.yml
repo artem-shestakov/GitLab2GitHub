@@ -1,6 +1,8 @@
 fetch-version:
   stage: pre-release
   image: node:18
+  variables:
+    GL_TOKEN: $CI_JOB_TOKEN
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
     - if: '$CI_COMMIT_BRANCH == "develop"'
@@ -16,6 +18,8 @@ fetch-version:
 release:
   stage: release
   image: node:18
+  variables:
+    GL_TOKEN: $CI_JOB_TOKEN
   rules:
     - if: '$CI_COMMIT_BRANCH == "master" && $CI_PIPELINE_SOURCE !="web"'
     - if: '$CI_COMMIT_BRANCH == "develop" && $CI_PIPELINE_SOURCE !="web"'
