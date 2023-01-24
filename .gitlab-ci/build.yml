@@ -1,0 +1,14 @@
+---
+build:
+  stage: build
+  before_script:
+    - echo "$DOCKERHUB_TOKEN" | docker login -u $DOCKERHUB_USERNAME --password-stdin
+  script:
+    - version=`cat VERSION.txt`
+    - docker build -t artemshestakov/gitlab2github:$version .
+    - docker push artemshestakov/gitlab2github:$version
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+  tags:
+    - docker.sock

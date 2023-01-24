@@ -1,11 +1,14 @@
+import asyncio
+import os
 import typer
-
-from .github.cli import app as github_app
-from gitlab2github import __appname__, __version__
+from gitlab2github import __appname__, __version__, __env__
+from rich.console import Console
+from .gitlab import mirror_repository
 
 
 app = typer.Typer()
-app.add_typer(github_app, name="github")
+err_console = Console(stderr=True)
+console = Console()
 
 def _version_callback(value: bool) -> None:
     if value:
@@ -24,3 +27,25 @@ def main(
     )
 ) -> None:
     return
+
+@app.command()
+def mirror(
+    id: int = typer.Argument(
+        None, 
+        help="GitLab project ID",
+        metavar="GL_PROJECT_ID"),
+    name: str = typer.Argument(
+        None, 
+        help="GitHub project name",
+        metavar="GH_PROJECT_NAME")
+    ):
+    """
+    Create a push mirror from Gitlab project to GitHub project.
+    """
+    for env in __env__:
+        try:
+            os.environ[env]
+        except KeyError:
+            err_console.print(f"Variable \"{env}\" is not defined")
+            raise typer.Exit(1)
+    asyncio.run(mirror_repository(id, name.lower()))

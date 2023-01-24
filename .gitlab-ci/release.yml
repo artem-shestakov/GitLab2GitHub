@@ -1,0 +1,26 @@
+fetch-version:
+  stage: pre-release
+  image: node:18
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+  script:
+    - npm install @semantic-release/gitlab @semantic-release/exec
+    - npx semantic-release --generate-notes false --dry-run
+  artifacts:
+    paths:
+      - VERSION.txt
+  tags:
+    - docker.sock
+
+release:
+  stage: release
+  image: node:18
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" && $CI_PIPELINE_SOURCE !="web"'
+    - if: '$CI_COMMIT_BRANCH == "develop" && $CI_PIPELINE_SOURCE !="web"'
+  script:
+    - npm install @semantic-release/gitlab @semantic-release/exec
+    - npx semantic-release
+  tags:
+    - docker.sock
