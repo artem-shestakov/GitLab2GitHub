@@ -1,10 +1,11 @@
 import aiohttp
+import asyncio
 import os
 import typer
 from gitlab2github import __env__
 from rich.console import Console
 from .utils import get, post
-from .github import create_repo
+from .github import create_repo, create_secret
 
 
 # stderr and stdout console
@@ -51,7 +52,7 @@ async def create_push_mirror(project_id: int, url: str, session, headers=None) -
     err_console.print(f"⚠️ Responce code: {resp['code']}. {resp['response']['message']}")
     raise typer.Exit(1)
 
-async def mirror_repository(gl_project_id: int, gh_project_name: str, url=None):
+async def mirror_repository(gl_project_id: int, gh_project_name: str, secrets: str, url=None):
     """
     Create GitHub repository and mirroring GitLab repository and
     created GitHub repository
@@ -67,9 +68,21 @@ async def mirror_repository(gl_project_id: int, gh_project_name: str, url=None):
     async with aiohttp.ClientSession() as session:
         # Check GitHub repository or create it
         repository = await create_repo(gh_project_name, session=session, headers=gh_headers)
-
-        # Check current mirrors
+        
+        # Create secrets and mirror
         if repository:
+            if secrets:
+                tasks = []
+                for secret in secrets.replace(" ", "").split(","):
+                    tasks.append(asyncio.ensure_future(create_secret(
+                        session, 
+                        repository["name"], 
+                        secret.split("=")[0], 
+                        secret.split("=")[-1],
+                        gh_headers
+                        )))
+                await asyncio.gather(*tasks)
+            # Check current mirrors
             curret_mirrors = await get_mirrors(gl_project_id, session, headers=gl_headers)
             for mirror in curret_mirrors:
                 if mirror["url"].split("@")[-1] == repository["html_url"].replace("https://", ""):
