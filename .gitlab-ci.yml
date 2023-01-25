@@ -8,4 +8,6 @@ stages:
 include:
   - local: '.gitlab-ci/release.yml'
   - local: '.gitlab-ci/build.yml'
-  - local: '.gitlab-ci/migrate.yml'
+  - project: 'artem-shestakov/pipeline-template'
+    file: github_mirror.yml
+    ref: master

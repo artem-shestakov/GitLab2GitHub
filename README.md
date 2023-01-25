@@ -10,6 +10,15 @@ Create Acces tokens to communicate with repository and use environment variables
 | GL_TOKEN | A GitLab [personal access token](https://docs.gitlab.com/ce/user/profile/personal_access_tokens.html).
 | GL_USER | GitLab repository owner
 
+## GitHub secrets
+If you need create GitHub secret use flag `-s` or `--secrets`. The format is `SECRET_NAME=VALUE`. For more then one secret use comma. If secret exists it will be updated.
+```shell
+# Create secret TOP_SECRET
+python3 -m gitlab2github mirror 42771718 GitLab2GitHub -s TOP_SECRET=asd
+
+# Create three secrets
+python3 -m gitlab2github mirror 42771718 GitLab2GitHub -s ONE=one,TWO=2,THREE=three
+```
 
 Example:
 ```shell
