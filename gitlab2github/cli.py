@@ -37,7 +37,13 @@ def mirror(
     name: str = typer.Argument(
         None, 
         help="GitHub project name",
-        metavar="GH_PROJECT_NAME")
+        metavar="GH_PROJECT_NAME"),
+    secrets: str = typer.Option(
+        "", 
+        "--secrets",
+        "-s",
+        help="Create/update GitHub repository secrets as key=value. Multiple secrets separated by a comma"
+        )
     ):
     """
     Create a push mirror from Gitlab project to GitHub project.
@@ -48,4 +54,4 @@ def mirror(
         except KeyError:
             err_console.print(f"Variable \"{env}\" is not defined")
             raise typer.Exit(1)
-    asyncio.run(mirror_repository(id, name.lower()))
+    asyncio.run(mirror_repository(id, name.lower(), secrets))
